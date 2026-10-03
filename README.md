@@ -2,7 +2,7 @@
 
 Documentación pública de un servidor casero construido con un portátil reutilizado: Debian 13, Docker, acceso privado con Tailscale, aplicaciones bajo demanda, monitoreo y respaldos cifrados.
 
-**[Leer la web](https://lcast-homelab.cheery-ibex-4280.chatgpt.site)** · **[Guía para montar algo parecido](docs/replicar.md)**
+**[Leer la web](https://lcast-homelab.lenin61121.chatgpt.site)** · **[Guía para montar algo parecido](docs/replicar.md)**
 
 El diseño se contrastó con documentación, repositorios del proyecto y una consulta de solo lectura al servidor el **3 de octubre de 2026**. Los ejemplos son nuevos y no contienen la configuración privada de la instalación.
 
