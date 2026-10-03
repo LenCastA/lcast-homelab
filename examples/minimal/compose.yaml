@@ -1,0 +1,13 @@
+name: homelab-minimal
+
+services:
+  uptime-kuma:
+    image: ${KUMA_IMAGE:?Copia .env.example a .env y revisa KUMA_IMAGE}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - kuma-data:/app/data
+
+volumes:
+  kuma-data:

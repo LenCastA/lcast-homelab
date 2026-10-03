@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{DESCRIPTION}}">
+  <meta name="theme-color" content="#152a2d">
+  <title>{{TITLE}}</title>
+  <link rel="icon" type="image/svg+xml" href="{{BASE}}/assets/favicon.svg">
+  <link rel="stylesheet" href="{{BASE}}/assets/styles.css">
+  <script src="{{BASE}}/assets/app.js" defer></script>
+</head>
+<body class="{{PAGE_CLASS}}" data-root="{{BASE}}/" id="top">
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+  <div class="sidebar-backdrop" hidden></div>
+  <aside class="sidebar" id="site-sidebar" aria-label="Navegación principal">
+    <a class="brand" href="{{BASE}}/" aria-label="LCast Homelab, inicio"><span class="brand-mark" aria-hidden="true">L<span>.</span></span><span class="brand-name">LCast<span>HOMELAB</span></span></a>
+    <button class="search-trigger" data-search-open type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg><span>Buscar en la guía</span><kbd>/</kbd></button>
+    <nav class="site-nav" aria-label="Páginas de documentación">{{NAVIGATION}}</nav>
+    <div class="sidebar-footer"><p>Compartir lo aprendido.<br>Construir a tu manera.</p><a href="{{GITHUB}}">Código y documentación <span aria-hidden="true">↗</span></a><span class="sidebar-note">Público · sin credenciales</span></div>
+  </aside>
+  <div class="site-shell">
+    <header class="topbar"><button class="menu-toggle" type="button" aria-label="Abrir navegación" aria-expanded="false" aria-controls="site-sidebar"><span></span><span></span></button><div class="breadcrumb">{{BREADCRUMB}}</div><a class="topbar-github" href="{{GITHUB}}">GitHub <span aria-hidden="true">↗</span></a><button class="mobile-search" data-search-open aria-label="Buscar documentación" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg></button></header>
+    <main class="main" id="main-content" tabindex="-1">{{HERO}}<div class="reading-layout"><div class="reading-column"><article class="prose">{{CONTENT}}</article>{{PAGE_NAVIGATION}}</div>{{TOC}}</div></main>
+    <footer class="site-footer"><span>LCast Homelab</span><p>Una referencia para aprender, adaptar y replicar.</p><a href="{{GITHUB}}">Contribuir en GitHub <span aria-hidden="true">↗</span></a></footer>
+  </div>
+  <dialog class="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">Buscar en la documentación</h2><button class="search-close" type="button" aria-label="Cerrar búsqueda">×</button></div><div class="search-input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg><input id="search-input" type="search" autocomplete="off" placeholder="Servicios, backups, instalación…" aria-label="Texto a buscar" aria-describedby="search-status"></div><p class="search-status" id="search-status" role="status">Busca por tema o palabra. La búsqueda se realiza en tu navegador.</p><div class="search-results"></div><div class="search-hint"><span><kbd>Esc</kbd> para cerrar</span><span>Sin servicios externos</span></div></dialog>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "lcast-homelab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Documentación pública del homelab LCast, generada desde Markdown.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": { "marked": "18.0.14" }
+}
