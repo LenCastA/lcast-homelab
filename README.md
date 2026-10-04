@@ -39,7 +39,7 @@ La compilación genera `dist/`. Incluye búsqueda local, índice por capítulo y
 
 Si usas Cloudflare Tunnel, añade el hostname a tu túnel apuntando al proxy de Dokploy, por ejemplo `http://dokploy-traefik:80`, y su registro DNS. Cloudflare atiende el HTTPS público; el dominio de Dokploy usa HTTP dentro de la red Docker. Con publicación directa, configura HTTPS en Dokploy.
 
-Para actualizar, sube los cambios a GitHub y vuelve a desplegar desde Dokploy. La integración continua comprueba la compilación en cada push y pull request.
+La publicación de LCast tiene despliegue automático al subir cambios a `main`. También puedes iniciar un despliegue desde Dokploy. La integración continua comprueba la compilación en cada push y pull request.
 
 También puedes probar la imagen localmente:
 
