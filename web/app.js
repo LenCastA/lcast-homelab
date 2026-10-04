@@ -1,27 +1,25 @@
 (() => {
   'use strict';
-  const sidebar = document.querySelector('.sidebar');
+  const navigation = document.querySelector('.site-nav');
   const menu = document.querySelector('.menu-toggle');
-  const backdrop = document.querySelector('.sidebar-backdrop');
-  const mobile = window.matchMedia('(max-width: 980px)');
+  const header = document.querySelector('.site-header');
+  const mobile = window.matchMedia('(max-width: 1100px)');
   let menuOpened = false;
   function toggleMenu(open) {
     menuOpened = open;
-    sidebar.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
+    navigation.classList.toggle('is-open', open);
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación');
-    backdrop.hidden = !open;
-    sidebar.inert = mobile.matches && !open;
-    if (open) sidebar.querySelector('a, button').focus();
-    else if (mobile.matches && document.activeElement && sidebar.contains(document.activeElement)) menu.focus();
+    navigation.inert = mobile.matches && !open;
+    if (open) navigation.querySelector('a').focus();
+    else if (mobile.matches && document.activeElement && navigation.contains(document.activeElement)) menu.focus();
   }
-  if (sidebar && menu) {
-    sidebar.inert = mobile.matches;
+  if (navigation && menu) {
+    navigation.inert = mobile.matches;
     menu.addEventListener('click', () => toggleMenu(!menuOpened));
-    backdrop.addEventListener('click', () => toggleMenu(false));
-    mobile.addEventListener('change', () => { toggleMenu(false); sidebar.inert = mobile.matches; });
-    sidebar.querySelectorAll('.nav-link').forEach((link) => link.addEventListener('click', () => toggleMenu(false)));
+    document.addEventListener('click', (event) => { if (menuOpened && !header.contains(event.target)) toggleMenu(false); });
+    mobile.addEventListener('change', () => { toggleMenu(false); navigation.inert = mobile.matches; });
+    navigation.querySelectorAll('.nav-link').forEach((link) => link.addEventListener('click', () => toggleMenu(false)));
   }
 
   const dialog = document.querySelector('.search-dialog');
@@ -63,7 +61,7 @@
     const query = input.value.trim();
     const terms = normalize(query).split(/\s+/).filter(Boolean);
     emptyResults();
-    if (!terms.length) { status.textContent = 'Busca por tema o palabra. La búsqueda se realiza en tu navegador.'; return; }
+    if (!terms.length) { status.textContent = 'Busca por tema o palabra.'; return; }
     status.textContent = 'Buscando…';
     try {
       const index = await getIndex();
@@ -116,12 +114,6 @@
     const writing = /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName) || event.target.isContentEditable;
     if ((event.key === '/' && !writing) || ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k')) { event.preventDefault(); openSearch(); }
     if (event.key === 'Escape' && menuOpened) toggleMenu(false);
-    if (event.key === 'Tab' && menuOpened) {
-      const focusable = [...sidebar.querySelectorAll('a,button')].filter((element) => !element.disabled);
-      const first = focusable[0]; const last = focusable.at(-1);
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    }
   });
   document.querySelectorAll('.prose table').forEach((table) => {
     const wrapper = document.createElement('div');

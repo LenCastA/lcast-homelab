@@ -42,12 +42,31 @@ for (const page of pages) {
 if (distDir !== join(root, 'dist')) throw new Error('Directorio de salida inválido');
 await rm(distDir, { recursive: true, force: true });
 await mkdir(join(distDir, 'assets'), { recursive: true });
-for (const file of ['styles.css', 'app.js', 'favicon.svg', 'server.svg']) {
+for (const file of ['styles.css', 'app.js', 'favicon.svg']) {
   await copyFile(join(root, 'web', file), join(distDir, 'assets', file));
+}
+await mkdir(join(distDir, 'assets', 'fonts'), { recursive: true });
+for (const family of ['geist', 'geist-mono']) {
+  const filename = `${family}-latin-400-normal.woff2`;
+  await copyFile(join(root, 'node_modules', '@fontsource', family, 'files', filename), join(distDir, 'assets', 'fonts', filename));
+  await copyFile(join(root, 'node_modules', '@fontsource', family, 'LICENSE'), join(distDir, 'assets', 'fonts', `${family}-license.txt`));
 }
 await writeFile(join(distDir, '.nojekyll'), '');
 const template = await readFile(join(root, 'web', 'template.html'), 'utf8');
 const searchIndex = [];
+const hardwareMarkdown = sourcePages.find((page) => page.slug === 'hardware')?.markdown || '';
+const hardwareText = plain(hardwareMarkdown);
+const hardwareTable = new Marked().lexer(hardwareMarkdown).find((token) => token.type === 'table');
+const storageRows = hardwareTable?.rows || [];
+const storage = (type) => storageRows.find((row) => row.some((cell) => cell.text.includes(type)));
+const specs = [
+  { label: 'CPU', value: hardwareText.match(/Ryzen\s+7\s+2700U/i)?.[0] },
+  { label: 'RAM', value: hardwareText.match(/RAM[^.]*?\b(\d+\s*GB)\b/i)?.[1] },
+  { label: 'SSD', value: storage('SSD')?.[1]?.text },
+  { label: 'HDD', value: storage('HDD')?.[1]?.text },
+].filter((spec) => spec.value);
+const model = hardwareText.match(/Lenovo\s+IdeaPad\s+330-15ARR/i)?.[0];
+const system = hardwareText.match(/Debian\s+13/i)?.[0];
 
 function renderPage(page, index) {
   const home = page.slug === 'index';
@@ -81,15 +100,16 @@ function renderPage(page, index) {
   const topHeading = tokens[firstHeading];
   const title = topHeading?.type === 'heading' && topHeading.depth === 1 ? plain(topHeading.text) : page.label;
   if (topHeading?.type === 'heading' && topHeading.depth === 1) tokens.splice(firstHeading, 1);
-  const content = marked.parser(tokens);
   const firstParagraph = tokens.find((token) => token.type === 'paragraph');
   const description = plain(firstParagraph?.text || 'Documentación pública y guía del homelab LCast.').slice(0, 170);
-  const navigation = sourcePages.map((nav, navIndex) => {
-    const group = navIndex === 0 || sourcePages[navIndex - 1].group !== nav.group ? `<p class="nav-group">${escape(nav.group)}</p>` : '';
-    return `${group}<a class="nav-link${nav.slug === page.slug ? ' is-current' : ''}" href="${base}/${nav.slug === 'index' ? '' : `${nav.slug}/`}"${nav.slug === page.slug ? ' aria-current="page"' : ''}><span class="nav-number">${String(navIndex + 1).padStart(2, '0')}</span><span>${escape(nav.label)}</span></a>`;
-  }).join('');
+  const heroDescription = plain(firstParagraph?.text || 'Documentación del homelab LCast y una guía para construir tu propia versión.');
+  if (home && firstParagraph) tokens.splice(tokens.indexOf(firstParagraph), 1);
+  const content = marked.parser(tokens);
+  const navLabel = { index: 'Inicio', replicar: 'Guía', backups: 'Backups' };
+  const navigation = sourcePages.map((nav) => `<a class="nav-link${nav.slug === page.slug ? ' is-current' : ''}" href="${base}/${nav.slug === 'index' ? '' : `${nav.slug}/`}"${nav.slug === page.slug ? ' aria-current="page"' : ''}>${escape(navLabel[nav.slug] || nav.label)}</a>`).join('');
+  const systemPanel = `<section class="system-panel" aria-label="Equipo y ruta de administración"><div class="system-panel-header"><span class="panel-label">Hardware</span><svg viewBox="0 0 28 28" width="28" height="28" fill="none" aria-hidden="true"><rect x="5" y="4" width="18" height="20" rx="1" stroke="currentColor"/><path d="M9 9h10M9 14h10M9 19h5" stroke="currentColor"/></svg></div>${model ? `<h2>${escape(model)}</h2>` : ''}<dl class="system-specs">${specs.map((spec) => `<div><dt>${escape(spec.label)}</dt><dd>${escape(spec.value)}</dd></div>`).join('')}</dl><div class="system-route"><p class="panel-label">Ruta de administración</p><div class="route-nodes"><span>Tailscale</span><span class="route-arrow" aria-hidden="true">→</span><span>${escape(system || 'Debian')}</span><span class="route-arrow" aria-hidden="true">→</span><span>Docker</span></div></div><a class="panel-link" href="${base}/hardware/">Ver el equipo y el almacenamiento <span aria-hidden="true">↗</span></a></section>`;
   const hero = home
-    ? `<div class="home-hero"><div class="hero-copy"><p class="eyebrow"><span></span>Un servidor en casa</p><h1>${escape(title)}</h1><p class="hero-lead">Documentación del homelab LCast y una guía para construir tu propia versión.</p><div class="hero-actions">${sourcePages.some((p) => p.slug === 'replicar') ? `<a class="button button-primary" href="${base}/replicar/">Cómo replicarlo <span aria-hidden="true">↗</span></a>` : ''}<a class="button button-secondary" href="${gitHub}">Ver en GitHub <span aria-hidden="true">↗</span></a></div></div><figure class="hero-figure"><img src="${base}/assets/server.svg" alt="Ilustración de un servidor doméstico conectado a servicios y almacenamiento" width="490" height="430"><figcaption>Ilustración conceptual de un servidor casero</figcaption></figure></div>`
+    ? `<div class="home-hero"><div class="hero-copy"><p class="eyebrow">Servidor casero</p><h1>${escape(title)}</h1><p class="hero-lead">${escape(heroDescription)}</p><div class="hero-actions">${sourcePages.some((p) => p.slug === 'replicar') ? `<a class="button button-primary" href="${base}/replicar/">Cómo replicarlo <span aria-hidden="true">↗</span></a>` : ''}<a class="button button-secondary" href="${base}/arquitectura/">Explorar la arquitectura <span aria-hidden="true">→</span></a></div></div>${systemPanel}</div>`
     : `<header class="page-hero"><p class="eyebrow">${escape(page.group)} <span class="eyebrow-line"></span> ${String(index + 1).padStart(2, '0')}</p><h1>${escape(title)}</h1></header>`;
   const previous = sourcePages[index - 1];
   const next = sourcePages[index + 1];
