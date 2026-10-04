@@ -1,0 +1,12 @@
+*
+!Dockerfile
+!package.json
+!package-lock.json
+!scripts/
+!scripts/**
+!docs/
+!docs/**
+!web/
+!web/**
+!deploy/
+!deploy/nginx.conf

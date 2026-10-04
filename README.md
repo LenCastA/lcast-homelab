@@ -1,28 +1,26 @@
 # LCast Homelab
 
-Documentación pública de un servidor casero construido con un portátil reutilizado: Debian 13, Docker, acceso privado con Tailscale, aplicaciones bajo demanda, monitoreo y respaldos cifrados.
+Un servidor casero construido con un portátil reutilizado: Debian, Docker, acceso privado con Tailscale, aplicaciones bajo demanda, monitoreo y respaldos cifrados.
 
-**[Leer la web](https://lcast-homelab.lenin61121.chatgpt.site)** · **[Guía para montar algo parecido](docs/replicar.md)**
-
-El diseño se contrastó con documentación, repositorios del proyecto y una consulta de solo lectura al servidor el **3 de octubre de 2026**. Los ejemplos son nuevos y no contienen la configuración privada de la instalación.
+**[Leer la web](https://homelab.lengcast.com)** · **[Montar algo parecido](docs/replicar.md)**
 
 ## Contenido
 
 | Página | Qué encontrarás |
 | --- | --- |
-| [Inicio](docs/index.md) | Qué es el laboratorio y qué permite hacer |
+| [Inicio](docs/index.md) | El laboratorio y sus usos |
 | [Arquitectura](docs/arquitectura.md) | Capas, red privada y publicación de aplicaciones |
-| [Hardware](docs/hardware.md) | Portátil, recursos y organización del almacenamiento |
-| [Servicios](docs/servicios.md) | Herramientas habituales, bajo demanda y retiradas |
-| [Replicación](docs/replicar.md) | Montaje por etapas y comprobaciones |
-| [Operación](docs/operacion.md) | Actualización controlada, observación y alertas |
-| [Backups](docs/backups.md) | Cobertura, copia externa y recuperación |
-| [Decisiones](docs/decisiones.md) | Motivos, alternativas y límites |
-| [Recursos](docs/recursos.md) | Referencias oficiales y método de verificación |
+| [Hardware](docs/hardware.md) | Equipo, recursos y almacenamiento |
+| [Servicios](docs/servicios.md) | Herramientas habituales y bajo demanda |
+| [Replicación](docs/replicar.md) | Montaje por etapas |
+| [Operación](docs/operacion.md) | Actualizaciones, observación y alertas |
+| [Backups](docs/backups.md) | Copia externa y recuperación |
+| [Decisiones](docs/decisiones.md) | Motivos y alternativas |
+| [Recursos](docs/recursos.md) | Documentación de las herramientas |
 
-## Generar la web
+## Desarrollo
 
-Requiere Node.js 20 o posterior y npm. El Markdown de `docs/` es la fuente del sitio; no hay que editar una segunda copia del contenido.
+Requiere Node.js 20 o posterior. El Markdown de `docs/` es la fuente de la web.
 
 ```bash
 npm ci
@@ -30,22 +28,34 @@ npm run build
 npm run preview
 ```
 
-La compilación produce `dist/`. La vista previa indica su dirección local. La web contiene navegación, índice por capítulo y búsqueda local; se puede alojar como archivos estáticos sin backend ni credenciales.
+La compilación genera `dist/`. Incluye búsqueda local, índice por capítulo y fuentes servidas desde el propio sitio.
 
-La integración continua comprueba la compilación en cada push y pull request. El contenido de `dist/` puede publicarse en un proveedor de hosting estático. Conserva las rutas y sirve los archivos `index.html` de cada directorio.
+## Despliegue con Dokploy
+
+1. Crea una aplicación y conecta este repositorio, rama `main`, ruta `/`.
+2. Selecciona **Dockerfile** como método de compilación, archivo `Dockerfile` y contexto `.`.
+3. Añade tu dominio con puerto de destino **80** y ruta `/`.
+4. Despliega. La imagen compila los documentos y Nginx sirve la web.
+
+Si usas Cloudflare Tunnel, añade el hostname a tu túnel apuntando al proxy de Dokploy, por ejemplo `http://dokploy-traefik:80`, y su registro DNS. Cloudflare atiende el HTTPS público; el dominio de Dokploy usa HTTP dentro de la red Docker. Con publicación directa, configura HTTPS en Dokploy.
+
+Para actualizar, sube los cambios a GitHub y vuelve a desplegar desde Dokploy. La integración continua comprueba la compilación en cada push y pull request.
+
+También puedes probar la imagen localmente:
+
+```bash
+docker build -t lcast-homelab .
+docker run --rm -p 127.0.0.1:8080:80 lcast-homelab
+```
 
 ## Ejemplo mínimo
 
-[examples/minimal](examples/minimal/README.md) contiene Uptime Kuma con un volumen persistente y acceso mediante un túnel SSH. La sintaxis se validó con Docker Compose; no se desplegó al preparar este repositorio. Cada persona debe crear sus credenciales y definir sus propios respaldos.
+[examples/minimal](examples/minimal/README.md) contiene Uptime Kuma con un volumen persistente y acceso mediante un túnel SSH.
 
-## Editar y compartir
+## Contribuir
 
-Edita los archivos Markdown, compila y revisa los enlaces antes de publicar. Los cambios en este repositorio no modifican el servidor original. La publicación alojada de la web debe actualizarse con el nuevo contenido compilado.
-
-Antes de añadir ejemplos, revisa que no contengan tokens, contraseñas, claves, direcciones de la instalación, configuraciones privadas ni datos personales. Mantén separados los valores de tu entorno. No subas respaldos o archivos de recuperación al repositorio.
-
-El laboratorio utiliza un único equipo y una conexión doméstica. La guía describe una arquitectura adaptable; no promete alta disponibilidad ni tiempos de recuperación medidos.
+Edita los documentos, compila y revisa los enlaces. Usa valores de ejemplo en las configuraciones y conserva los secretos de tu entorno fuera del repositorio.
 
 ## Licencia
 
-[MIT](LICENSE), para el código y la documentación de este repositorio. Las herramientas descritas mantienen sus propias licencias.
+[MIT](LICENSE) para el código y la documentación. Las herramientas descritas y las fuentes conservan sus propias licencias.
