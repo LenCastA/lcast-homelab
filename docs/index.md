@@ -15,7 +15,7 @@ La base es sencilla: **Debian 13, Docker, acceso privado con Tailscale y respald
 
 ## El equipo
 
-| Componente | Configuración observada |
+| Componente | Configuración |
 | --- | --- |
 | Equipo | Lenovo IdeaPad 330-15ARR reutilizado |
 | Procesador | AMD Ryzen 7 2700U, 4 núcleos y 8 hilos |
@@ -24,7 +24,7 @@ La base es sencilla: **Debian 13, Docker, acceso privado con Tailscale y respald
 | Disco secundario | HDD de 2 TB para archivos y respaldo local |
 | Sistema | Debian GNU/Linux 13 instalado directamente |
 
-Las capacidades comerciales de los discos son distintas de las que muestra Linux en GiB. Estas especificaciones describen este equipo; se puede empezar con otro ordenador y menos servicios.
+Puedes empezar con otro ordenador y un conjunto pequeño de servicios.
 
 ## Por dónde empezar
 
@@ -32,10 +32,4 @@ Si quieres entenderlo, comienza por la [arquitectura](arquitectura.md), el [hard
 
 Si quieres construir algo parecido, sigue la [guía de replicación](replicar.md). Después revisa la [operación](operacion.md), los [respaldos y recuperación](backups.md) y las [decisiones de diseño](decisiones.md).
 
-## Alcance de esta documentación
-
-La configuración general se contrastó con repositorios y documentación del proyecto, y con una consulta de solo lectura al servidor el **3 de octubre de 2026**. Las versiones concretas de las aplicaciones y su estado de encendido cambian; aquí se describe su función y política de uso.
-
-Es una explicación pública y una guía por etapas. Los ejemplos usan valores ficticios y configuración nueva. Las instrucciones específicas de cada herramienta están enlazadas en [recursos](recursos.md). El inventario no es un panel de estado en tiempo real.
-
-El laboratorio depende de un único equipo, de la conexión doméstica y de algunos servicios externos. No se han medido aquí consumo eléctrico, alta disponibilidad ni tiempos garantizados de recuperación.
+Las [referencias oficiales](recursos.md) complementan los pasos de instalación y configuración de cada herramienta.

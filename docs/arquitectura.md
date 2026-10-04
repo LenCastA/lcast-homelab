@@ -44,19 +44,17 @@ Visitante de una app pública
 Tailscale conecta los dispositivos autorizados. Para empezar basta con acceder al servidor por esa red y usar SSH. La instalación completa añade nombres internos y HTTPS:
 
 1. Split DNS dirige las consultas del dominio privado a CoreDNS.
-2. CoreDNS escucha en la interfaz de Tailscale y resuelve los nombres hacia el acceso privado.
+2. CoreDNS escucha en la dirección Tailscale del servidor y resuelve los nombres hacia el acceso privado.
 3. Traefik termina HTTPS con certificados obtenidos mediante DNS-01.
 4. Un gateway Caddy conecta esa entrada con los servicios internos.
 
-Tailscale Services ofrece una vía alternativa de acceso a servicios. Samba y SFTP necesitan sus propios permisos y rutas; un proxy HTTP no transporta automáticamente esos protocolos.
+Tailscale Services ofrece una vía alternativa de acceso. Samba y SFTP utilizan sus propias rutas y permisos.
 
-Los certificados acreditan el nombre del servicio. La autorización sigue dependiendo de Tailscale, de la política de acceso y de la autenticación de cada aplicación. La configuración de DNS se explica en la [documentación de Tailscale](https://tailscale.com/docs/reference/dns-in-tailscale).
+El acceso se controla con la política de Tailscale y la autenticación de cada aplicación. Los certificados permiten usar HTTPS con esos nombres. Consulta la [configuración de DNS en Tailscale](https://tailscale.com/docs/reference/dns-in-tailscale).
 
 ## Aplicaciones públicas
 
 Cloudflared mantiene un túnel saliente hacia Cloudflare. Se publica la aplicación elegida y se conserva la administración en la red privada. Este recorrido evita depender de una redirección de puertos entrantes en el router. Véase [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/).
-
-En este diseño, Cloudflare Tunnel no forma parte del recorrido privado de Tailscale. Tampoco se presupone que todas las aplicaciones tengan una política adicional de Cloudflare Access: eso debe configurarse cuando se necesite.
 
 ## Compose y Swarm
 
@@ -64,7 +62,7 @@ Docker Compose organiza herramientas del laboratorio. Dokploy administra desplie
 
 Conviene que cada aplicación tenga un único responsable de despliegue. Editar manualmente un contenedor administrado por Dokploy puede perderse en el siguiente despliegue.
 
-Swarm está activo en un único nodo. Esa elección facilita despliegues, pero no añade redundancia física: si el equipo se apaga, sus servicios también.
+Swarm funciona en un único nodo. Todos los despliegues dependen de ese equipo y se detienen cuando se apaga.
 
 ## Persistencia y automatización
 

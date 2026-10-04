@@ -1,6 +1,6 @@
 # Catálogo de servicios
 
-El laboratorio combina herramientas que permanecen disponibles con otras que se encienden al usarlas. Esta clasificación describe la política de operación, no una promesa de disponibilidad continua.
+El laboratorio combina herramientas residentes con otras que se encienden cuando se necesitan.
 
 ## Acceso, administración y despliegue
 
@@ -33,7 +33,7 @@ El laboratorio combina herramientas que permanecen disponibles con otras que se 
 | n8n | Automatización de flujos | Bajo demanda |
 | SonarQube | Análisis de proyectos de software | Bajo demanda |
 
-Mailpit recibe correo de pruebas; no sustituye un servicio de correo para usuarios. Encender Paperless-ngx o SonarQube puede implicar arrancar también sus bases de datos y componentes auxiliares. Se gestiona el conjunto como una unidad.
+Mailpit captura correo durante el desarrollo. Paperless-ngx y SonarQube se gestionan junto con sus bases de datos y componentes auxiliares.
 
 ## Observación, alertas y mantenimiento
 
@@ -51,14 +51,10 @@ Mailpit recibe correo de pruebas; no sustituye un servicio de correo para usuari
 | Trivy | Escaneo programado de vulnerabilidades |
 | Kopia y rclone | Respaldo cifrado local y copia externa |
 
-Scrutiny no necesita permanecer abierto para que exista vigilancia del disco: smartd y la recolección programada tienen papeles distintos. Las alertas deben llegar a un canal que se revise fuera del servidor.
-
-## Aplicaciones retiradas
-
-Forgejo y su runner, BookStack, Linkding y la instalación local de Healthchecks aparecen en registros históricos, pero fueron retirados. GitHub sigue siendo el origen de código y documentación, y Healthchecks se utiliza como servicio externo.
+smartd mantiene la vigilancia de los discos. Scrutiny recibe muestras programadas y ofrece una interfaz para consultar el histórico. Las alertas llegan a un canal que se pueda revisar fuera del servidor.
 
 ## Qué instalar primero
 
 Para replicarlo empieza con Debian, Tailscale, Docker, una herramienta de disponibilidad y una estrategia de respaldo. Añade un portal y una aplicación útil. Dokploy, el DNS privado, la automatización y las aplicaciones pesadas pueden incorporarse después.
 
-La lista completa explica el laboratorio actual. Instalarla de golpe en un equipo de 8 GB dificulta entender los fallos y controlar recursos. Continúa en la [guía por etapas](replicar.md).
+Incorporar servicios por etapas facilita entender los fallos y controlar los 8 GB de RAM. Continúa en la [guía de réplica](replicar.md).

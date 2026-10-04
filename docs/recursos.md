@@ -1,6 +1,6 @@
 # Recursos oficiales
 
-Estas páginas complementan la guía con instalación, configuración y comportamiento de cada herramienta. Los enlaces principales se consultaron al preparar la documentación el **3 de octubre de 2026**. Las versiones, límites de planes y comandos pueden cambiar; revisa la documentación del proveedor al instalar.
+Guías oficiales para instalar, configurar y mantener las herramientas del laboratorio.
 
 ## Sistema y acceso
 
@@ -32,15 +32,3 @@ Estas páginas complementan la guía con instalación, configuración y comporta
 | [rclone copy](https://rclone.org/commands/rclone_copy/) | Copia sin borrar archivos del destino |
 | [ntfy](https://docs.ntfy.sh/) | Avisos y control de acceso |
 | [Trivy](https://trivy.dev/docs/) | Escaneo y límites de resultados |
-
-## Cómo se elaboró la documentación
-
-Se compararon documentación operativa, configuración de infraestructura y stacks, automatizaciones y registros del proyecto. Una consulta de solo lectura al servidor confirmó el sistema, el hardware, Docker y Swarm, los contenedores presentes y resultados de tareas programadas.
-
-Los registros históricos se trataron como antecedentes. Las aplicaciones retiradas se señalan por separado y el estado puntual de un contenedor no se convierte en una garantía de disponibilidad.
-
-Los repositorios operativos conservan información propia de la instalación. Este repositorio público fue escrito desde cero y contiene solo explicaciones y ejemplos nuevos. No necesita acceso a la infraestructura original para ser leído o usar el ejemplo mínimo.
-
-## Actualizar esta guía
-
-Al cambiar una herramienta, revisa su función, persistencia, exposición y recuperación. Actualiza la fecha de verificación cuando vuelvas a contrastar el servidor. Evita mantener cifras de disponibilidad o versiones como si fueran datos en tiempo real.
